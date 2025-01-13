@@ -1,12 +1,34 @@
+const form = document.querySelector("form");
+const sheepInput = document.querySelector("#numSheep");
+
 // === State ===
 const state = {
   start: ["sheep"],
   target: [],
 };
 
+// Add event listeners to form and input
+// let numSheepToAdd = 0;
+
+// sheepInput.addEventListener("change", function (e) {
+//   numSheepToAdd = e.target.value;
+// });
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const numSheepToAdd = sheepInput.value;
+  for (let i = 0; i < numSheepToAdd; i++) {
+    state.start.push("sheep");
+  }
+  render();
+});
+
 /** Moves a sheep from start to target */
 function moveSheep() {
   // TODO
+  const sheepToMove = state.start.pop();
+  state.target.push(sheepToMove);
+  render();
 }
 
 // === Render ===
@@ -21,7 +43,9 @@ function renderStartSheep() {
     li.append(button);
 
     // TODO: Add event listener so the sheep moves when clicked
-
+    li.addEventListener("click", function () {
+      moveSheep();
+    });
     return li;
   });
 
@@ -31,7 +55,18 @@ function renderStartSheep() {
 
 /** Renders sheep on the target bank */
 function renderTargetSheep() {
-  // TODO
+  const targetSheep = state.target.map((sheep) => {
+    const li = document.createElement("li");
+
+    const button = document.createElement("button");
+    button.textContent = "🐑";
+    li.append(button);
+
+    return li;
+  });
+
+  const targetBank = document.querySelector("#targetBank ul");
+  targetBank.replaceChildren(...targetSheep);
 }
 
 function render() {
